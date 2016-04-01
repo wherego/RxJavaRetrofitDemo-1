@@ -28,7 +28,7 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
     }
 
     private void rangeTest() {
-        //发射5个不小于10的数据
+        //发射5个不大于等于的数据
         Observable.range(10, 5).subscribe(new BaseSubscriber<Integer>(this, rang));
     }
 
