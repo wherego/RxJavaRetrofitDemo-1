@@ -25,8 +25,8 @@ public class ApiFactory {
     protected Subscription toSubscribe(Observable o, Subscriber s)
     {
      return   o.subscribeOn(Schedulers.io())
-                .unsubscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+            // .unsubscribeOn(Schedulers.io())
+             .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(s);
     }
     /**

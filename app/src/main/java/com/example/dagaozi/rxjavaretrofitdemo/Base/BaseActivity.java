@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.dagaozi.rxjavaretrofitdemo.http.ApiMethods;
 
+import butterknife.ButterKnife;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -13,7 +14,6 @@ import rx.subscriptions.CompositeSubscription;
 public class BaseActivity extends AppCompatActivity {
     public static final ApiMethods apiMethods = ApiMethods.getInstance();
     private CompositeSubscription mCompositeSubscription;
-
 
     public CompositeSubscription getCompositeSubscription() {
         if (this.mCompositeSubscription == null) {
@@ -29,8 +29,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        ButterKnife.bind(BaseActivity.this);
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        ButterKnife.unbind(BaseActivity.this);
         if(mCompositeSubscription!=null)
             mCompositeSubscription.unsubscribe();
     }
