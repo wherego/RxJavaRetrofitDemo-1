@@ -36,8 +36,9 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
         //发射5个不大于等于的数据
         Observable.range(10, 5).subscribe(new BaseSubscriber<Integer>(this, rang));
     }
+    //defer实在订阅那一刻才赋值;just在创建Observable的时候就赋值。
     private void deferTest(){
-         Object i=10;
+         Object i=8;
     /*  Observable deferObservalbe=  Observable.defer(new Func0<Observable<Object>>() {
             @Override
             public Observable<Object> call() {
