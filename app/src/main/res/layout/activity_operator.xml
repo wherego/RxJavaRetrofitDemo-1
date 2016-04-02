@@ -10,5 +10,11 @@
         android:id="@+id/tvResult"
         android:text="@string/hello_world" android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btnTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="操作符测试"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>
