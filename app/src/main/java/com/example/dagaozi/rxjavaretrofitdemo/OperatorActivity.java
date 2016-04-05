@@ -29,6 +29,7 @@ import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.functions.Func2;
+import rx.functions.FuncN;
 import rx.observables.GroupedObservable;
 import rx.schedulers.Schedulers;
 
@@ -63,6 +64,10 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
     private static final int skipAndTake= 231;
     private static final int sample= 241;
     private static final int throttleFirst= 251;
+    //组合操作符
+    private static final int combineLatest=30;//所有的Observable最新发出的数据按照提供的函数规则组合
+    private static final int combineLatest1=30;//所有的Observable最新发出的数据按照提供的函数规则组合
+    private static final int concat=31;
 
 
     private StringBuilder result = new StringBuilder();
@@ -119,9 +124,12 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
         //ElementAtAndFilterTest();
         //firstAndLastTest();
       // skipAndTakeTest();
-        sampleAndThrottleFirst();
+        //sampleAndThrottleFirst();
+        /**组合操作符*/
+       // combineLatestTest1();
+        concatTest();
     }
-    /*******************************创建类操作符示例********************************************/
+    /*******************************创建类操作符示例（delayTest、RepeatTest除外）********************************************/
     private void rangeTest() {
         //发射5个不大于等于的数据
         Observable.range(10, 5).subscribe(new BaseSubscriber<Integer>(this, rang));
@@ -147,7 +155,8 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
         Observable.timer(5, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<Long>(this, timer));
     }
     private void intervalText(){
-        //Rxjava的轮询器，间隔发送整数序列（并且可以指定延时），比timer多了轮询。默认运行在computation Scheduler，所以订阅要指定Android主线程,它会一直发送直到订阅者调用unsubscribe()取消订阅为止。
+        //Rxjava的轮询器，间隔发送整数序列（并且可以指定延时），比timer多了轮询。默认运行在computation Scheduler，所以订阅要指定Android主线程,
+        // 它会一直发送直到订阅者调用unsubscribe()取消订阅为止。
         //下面的列子是三秒后发射Obserble,且每隔五秒发送一次
         Observable.interval(3, 5, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<Long>(this, interval));
     }
@@ -156,14 +165,14 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
         Observable.just("延时五秒钟发送我").delay(3,TimeUnit.SECONDS).subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<String>(this, delay));
     }
     private void RepeatTest(){
-        //默认运行在新线程
+        //重复发送，默认运行在新线程
         Observable.just("重复发送我5次").delay(3, TimeUnit.SECONDS).repeat(5).observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<String>(this, repeat));
     }
     /*************************************变换类操作符示例*********************************************/
     private void  bufferTest(){
       //缓存操作，按数量缓存，收集到两个数据后，把两个数据同时发射出去。还可以加第二个参数skip,buffer(2，3）表示每三个数据发送两个数据（[1,2],[4,5],[7,8]）
      // Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9).buffer(2,3).subscribe(new BaseSubscriber<List<Integer>>(this, buffer));
-      //缓存操作，按时间缓存，本来一秒钟发射依次，加上buffer(3,.TimeUnit.SECONDS)后，变成缓存3秒后发送
+      //缓存操作，按时间缓存，本来一秒钟发射一次，加上buffer(3,.TimeUnit.SECONDS)后，变成缓存3秒后发送
       Observable.interval(1, TimeUnit.SECONDS).buffer(3, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<List<Long>>(this, buffer));
     }
     private void windowTest(){
@@ -260,7 +269,8 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
                }
                subscriber.onCompleted();
            }
-       }).subscribeOn(Schedulers.newThread()).throttleWithTimeout(200, TimeUnit.MILLISECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<Integer>(this,throttleWithTimeOut));
+       }).subscribeOn(Schedulers.newThread()).throttleWithTimeout(200, TimeUnit.MILLISECONDS)
+               .observeOn(AndroidSchedulers.mainThread()).subscribe(new BaseSubscriber<Integer>(this,throttleWithTimeOut));
    }
    private void debounceTest(){
        //debounce操作符也可以使用时间来进行过滤，这时它跟throttleWithTimeOut使用起来是一样，但是deounce操作符还可以根据一个函数来进行限流。
@@ -298,7 +308,7 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
             }
         });*/
         //按条件过滤
-        Observable.just(1,2,3,4,6).filter(new Func1<Integer, Boolean>() {
+        Observable.just(1, 2, 3, 4, 6).filter(new Func1<Integer, Boolean>() {
             @Override
             public Boolean call(Integer integer) {
                 return integer % 2 == 0;
@@ -355,12 +365,62 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
                 }
                 subscriber.onCompleted();
             }
-        }).sample(1000, TimeUnit.MILLISECONDS).subscribe(new Action1<Integer>() {
+        }).sample(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.newThread()).subscribe(new Action1<Integer>() {
             @Override
             public void call(Integer integer) {
                 Log.d("elementAt", integer + "");
             }
         });//.throttleFirst(1000, TimeUnit.MILLISECONDS);
+    }
+    /********************************组合操作符**********************************/
+    //生成共组合使用的obserbable;
+    private Observable<String>  createObservables(final String index){
+        return Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                for(int i=1;i<6;i++){
+                    subscriber.onNext(i+":"+index);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).subscribeOn(Schedulers.newThread());
+    }
+    private void combineLatestTest(){
+       // CombineLatest操作符可以将2~9个Observable发射的数据组装起来然后再发射出来。不过还有两个前提：
+        //所有的Observable都发射过数据。
+       // 满足条件1的时候任何一个Observable发射一个数据，就将所有Observable最新发射的数据按照提供的函数组装起来发射出去。
+        //参数处理可以是一个一个Observable也可以是一个List<Observable>;详见：combineLatestTest1
+      Observable.combineLatest(createObservables("a"), createObservables("b"), new Func2<String, String, String>() {
+          @Override
+          public String call(String s, String s2) {
+              return s+"----"+s2;
+          }
+      }).subscribe(new BaseSubscriber<String>(this, combineLatest));
+    }
+
+    private void combineLatestTest1(){
+        final List<Observable<String>> list = new ArrayList<>();
+        for (int i=1;i<5;i++){
+            list.add(createObservables(i+""));
+        }
+        Observable.combineLatest(list, new FuncN<String>() {
+            @Override
+            public String call(Object... args) {
+              StringBuilder  temp=new StringBuilder("");
+              for(Object i :args){
+                  Log.d("temp", temp.toString());
+                  temp.append(i);
+              }
+                return temp.toString();
+            }
+        }).subscribe(new BaseSubscriber<String>(this, combineLatest));
+    }
+    private  void concatTest(){
+        Observable.concat(Observable.just(1,2,3),Observable.just(3,2,1)).subscribe(new BaseSubscriber<Integer>(this,concat));
     }
     @Override
     public void onNext(Object o, int flag) {
@@ -439,6 +499,13 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
                 break;
             case distinct:
                 Log.d("distinct", ((Integer) o) + "");
+                break;
+            /*****************************组合操作符*******************************************/
+            case combineLatest:
+                Log.d("combineLatest", ((String) o) );
+                break;
+            case concat:
+                Log.d("concat", ((Integer) o)+"" );
                 break;
             default:
                 Log.d("default", "no fand flag");
