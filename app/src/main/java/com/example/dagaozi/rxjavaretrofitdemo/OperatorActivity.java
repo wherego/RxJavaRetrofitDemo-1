@@ -67,7 +67,9 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
     //组合操作符
     private static final int combineLatest=30;//所有的Observable最新发出的数据按照提供的函数规则组合
     private static final int combineLatest1=30;//所有的Observable最新发出的数据按照提供的函数规则组合
-    private static final int concat=31;
+    private static final int concat=31;//顺序合并
+    private static final int merge=32;//有可能出现（发射数据的时间顺序）交叉合并
+    private static final int zip=33;//Observables发射出的数据项合并
 
 
     private StringBuilder result = new StringBuilder();
@@ -127,7 +129,9 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
         //sampleAndThrottleFirst();
         /**组合操作符*/
        // combineLatestTest1();
-        concatTest();
+        //concatTest();
+       // mergeTest();
+        zipTest();
     }
     /*******************************创建类操作符示例（delayTest、RepeatTest除外）********************************************/
     private void rangeTest() {
@@ -420,7 +424,22 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
         }).subscribe(new BaseSubscriber<String>(this, combineLatest));
     }
     private  void concatTest(){
-        Observable.concat(Observable.just(1,2,3),Observable.just(3,2,1)).subscribe(new BaseSubscriber<Integer>(this,concat));
+        Observable.concat(Observable.just(1, 2, 3), Observable.just(3, 2, 1)).subscribe(new BaseSubscriber<Integer>(this,concat));
+    }
+    private  void mergeTest(){
+        Observable.merge(createObservables("a"), createObservables("b")).subscribe(new BaseSubscriber<String>(this, merge));
+    }
+    private  void zipTest(){
+        Observable.zip(createObservables("a"), createObservables("b"),
+        new Func2<String, String, String>() {
+            @Override
+            public String call(String s, String s2) {
+                return s+"--zip---"+s2;
+            }
+        }).subscribe(new BaseSubscriber<String>(this, merge));
+    }
+    private  void joinTest(){
+
     }
     @Override
     public void onNext(Object o, int flag) {
@@ -506,6 +525,12 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
                 break;
             case concat:
                 Log.d("concat", ((Integer) o)+"" );
+                break;
+            case merge:
+                Log.d("merge", ((String) o));
+                break;
+            case zip:
+                Log.d("merge", ((String) o));
                 break;
             default:
                 Log.d("default", "no fand flag");
