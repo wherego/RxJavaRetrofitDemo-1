@@ -1,5 +1,6 @@
 package com.example.dagaozi.rxjavaretrofitdemo;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -10,11 +11,16 @@ import com.example.dagaozi.rxjavaretrofitdemo.Base.BaseActivity;
 import com.example.dagaozi.rxjavaretrofitdemo.Base.BaseSubscriber;
 import com.example.dagaozi.rxjavaretrofitdemo.Base.IBaseSubscriber;
 import com.example.dagaozi.rxjavaretrofitdemo.Utils.RxBus;
+import com.example.dagaozi.rxjavaretrofitdemo.dagger.components.AppComponent;
+import com.example.dagaozi.rxjavaretrofitdemo.dagger.components.DaggerActivityComponent;
+import com.example.dagaozi.rxjavaretrofitdemo.dagger.modules.ActivityModule;
 import com.example.dagaozi.rxjavaretrofitdemo.model.Subject;
 import com.example.dagaozi.rxjavaretrofitdemo.model.TaobaoModel;
 import com.example.dagaozi.rxjavaretrofitdemo.model.Weather;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -29,11 +35,22 @@ public class MainActivity extends BaseActivity implements IBaseSubscriber {
     @Bind(R.id.btnOper)
     Button btnOper;
     private Subscriber<Weather> subscriber;
+    @Inject
+    Context appContext;
+
+    @Override
+    protected void setUpComponent(AppComponent appComponent) {
+        DaggerActivityComponent.builder().appComponent(appComponent).activityModule(new ActivityModule(this)).build().inject(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+     /*  String appname= appContext.getPackageName();
+        tvTest.setText(appname);*/
+
       /*  Observer<String> observer=new Observer<String>() {
             @Override
             public void onCompleted() {

@@ -9,6 +9,7 @@ import com.example.dagaozi.rxjavaretrofitdemo.Base.BaseActivity;
 import com.example.dagaozi.rxjavaretrofitdemo.Base.BaseSubscriber;
 import com.example.dagaozi.rxjavaretrofitdemo.Base.IBaseSubscriber;
 import com.example.dagaozi.rxjavaretrofitdemo.Utils.DataTestManager;
+import com.example.dagaozi.rxjavaretrofitdemo.dagger.components.AppComponent;
 import com.example.dagaozi.rxjavaretrofitdemo.model.Course;
 import com.example.dagaozi.rxjavaretrofitdemo.model.Person;
 import com.example.dagaozi.rxjavaretrofitdemo.model.Student;
@@ -80,6 +81,11 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
     TextView tvResult;
     Observable justObservable;
     Observable deferObservalbe;
+
+    @Override
+    protected void setUpComponent(AppComponent appComponent) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

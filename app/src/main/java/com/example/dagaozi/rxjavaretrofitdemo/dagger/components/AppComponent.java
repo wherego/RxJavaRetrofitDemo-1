@@ -1,6 +1,7 @@
 package com.example.dagaozi.rxjavaretrofitdemo.dagger.components;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import com.example.dagaozi.rxjavaretrofitdemo.Base.App;
 import com.example.dagaozi.rxjavaretrofitdemo.dagger.modules.AppModule;
@@ -15,12 +16,10 @@ import dagger.Component;
  * 类描述：
  */
 @Singleton
-@Component(
-        modules = {
-                AppModule.class
-        }
-)
+@Component(modules = {AppModule.class})
 public interface AppComponent {
     void inject(App app);
-    Context context();
+    Context getAppContext();
+    Resources getResources();
+
 }

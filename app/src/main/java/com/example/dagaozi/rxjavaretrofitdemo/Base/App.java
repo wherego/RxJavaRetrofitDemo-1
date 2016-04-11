@@ -3,6 +3,8 @@ package com.example.dagaozi.rxjavaretrofitdemo.Base;
 import android.app.Application;
 
 import com.example.dagaozi.rxjavaretrofitdemo.dagger.components.AppComponent;
+import com.example.dagaozi.rxjavaretrofitdemo.dagger.components.DaggerAppComponent;
+import com.example.dagaozi.rxjavaretrofitdemo.dagger.modules.AppModule;
 
 /**
  * Created by dagaozi .（dagaozi@163.com）
@@ -14,10 +16,14 @@ public class App extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
-       setupGraph();
+      setUpComponent();
     }
 
-    private void setupGraph() {
-       /* component=DaggerAppComponent*//**/
+    private void setUpComponent() {
+        component= DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+        component.inject(this);
+    }
+    public AppComponent getAppcomponet(){
+        return component;
     }
 }

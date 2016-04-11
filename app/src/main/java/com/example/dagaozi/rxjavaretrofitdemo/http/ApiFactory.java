@@ -14,13 +14,13 @@ import rx.schedulers.Schedulers;
  * Created by dagaozi on 2016/3/30.
  */
 public class ApiFactory {
-   private static ApiStores apiStores = null;
+/*   private static ApiStores apiStores = null;
     public static ApiStores getApiStores() {
         if (apiStores == null) {
             apiStores = HttpMethods.getInstance().getApiStores();
         }
         return apiStores;
-    }
+    }*/
     //线程管理、订阅
     protected Subscription toSubscribe(Observable o, Subscriber s)
     {

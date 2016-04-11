@@ -95,7 +95,6 @@
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="butterknife-7.0.1" level="project" />
-    <orderEntry type="library" exported="" name="guava-18.0" level="project" />
     <orderEntry type="library" exported="" name="okio-1.6.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-24.0.0-alpha1" level="project" />
     <orderEntry type="library" exported="" name="retrofit-2.0.0-beta4" level="project" />
@@ -107,10 +106,8 @@
     <orderEntry type="library" exported="" name="rxandroid-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="rxjava-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-24.0.0-alpha1" level="project" />
-    <orderEntry type="library" exported="" name="dagger-producers-2.0-beta" level="project" />
     <orderEntry type="library" exported="" name="converter-gson-2.0.0-beta4" level="project" />
     <orderEntry type="library" exported="" name="javax.annotation-10.0-b28" level="project" />
-    <orderEntry type="library" exported="" name="dagger-compiler-2.0.2" level="project" />
     <orderEntry type="library" exported="" name="logging-interceptor-3.1.2" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-24.0.0-alpha1" level="project" />
     <orderEntry type="library" exported="" name="okhttp-3.1.2" level="project" />

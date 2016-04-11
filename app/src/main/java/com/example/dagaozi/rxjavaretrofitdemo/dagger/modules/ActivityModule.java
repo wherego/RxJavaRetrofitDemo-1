@@ -2,6 +2,9 @@ package com.example.dagaozi.rxjavaretrofitdemo.dagger.modules;
 
 import android.app.Activity;
 
+import com.example.dagaozi.rxjavaretrofitdemo.dagger.scope.ActivityScope;
+import com.example.dagaozi.rxjavaretrofitdemo.http.ApiMethods;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -18,8 +21,17 @@ public class ActivityModule {
     public ActivityModule(Activity mActivity) {
         this.mActivity = mActivity;
     }
+
     @Provides
+    @ActivityScope
     Activity provideActivity(){
         return mActivity;
+    }
+
+    @Provides
+/*    @Singleton*/
+    @ActivityScope
+    ApiMethods getApiMethods(){
+        return  new ApiMethods();
     }
 }
