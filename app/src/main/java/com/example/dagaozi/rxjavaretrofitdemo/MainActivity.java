@@ -23,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Subscriber;
 import rx.Subscription;
@@ -34,6 +35,8 @@ public class MainActivity extends BaseActivity implements IBaseSubscriber {
     TextView tvTest;
     @Bind(R.id.btnOper)
     Button btnOper;
+    @Bind(R.id.btnRecyclerView)
+    Button btnRecyclerView;
     private Subscriber<Weather> subscriber;
     @Inject
     Context appContext;
@@ -41,15 +44,28 @@ public class MainActivity extends BaseActivity implements IBaseSubscriber {
     @Override
     protected void setUpComponent(AppComponent appComponent) {
         DaggerActivityComponent.builder().appComponent(appComponent).activityModule(new ActivityModule(this)).build().inject(this);
+
+    }
+
+    @Override
+    protected void initViews() {
+
+    }
+
+    @Override
+    protected void initEvents() {
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-     /*  String appname= appContext.getPackageName();
-        tvTest.setText(appname);*/
+        String appname = appContext.getPackageName();
+        tvTest.setText(appname);
+        Toast.makeText(MainActivity.this, appname, Toast.LENGTH_SHORT).show();
 
       /*  Observer<String> observer=new Observer<String>() {
             @Override
@@ -83,11 +99,21 @@ public class MainActivity extends BaseActivity implements IBaseSubscriber {
         getTaobaodata2("21.22.11.33");
 
     }
-    @OnClick(R.id.btnOper)
-    public void btnClink(){
-        Intent i=new Intent(MainActivity.this,OperatorActivity.class);
-        startActivity(i);
+
+    @OnClick({R.id.btnOper,R.id.btnRecyclerView})
+    public void btnClink(Button btn) {
+        switch ((btn.getId())) {
+            case R.id.btnOper:
+            startActivity(new Intent(MainActivity.this, OperatorActivity.class));
+                break;
+            case R.id.btnRecyclerView:
+                startActivity(new Intent(MainActivity.this,RecycleViewActivity.class));
+                break;
+            default:
+                break;
+        }
     }
+
     private void getMoves(int start, int size) {
         Subscriber subscriber1 = new Subscriber<List<Subject>>() {
             @Override
@@ -177,7 +203,6 @@ public class MainActivity extends BaseActivity implements IBaseSubscriber {
                 });
         RxBus.getDefault().post(new TaobaoModel("RXBus测试"));
     }
-
 
 
     @Override

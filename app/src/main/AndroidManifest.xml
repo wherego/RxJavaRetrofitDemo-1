@@ -23,6 +23,10 @@
             android:name=".OperatorActivity"
             android:label="@string/title_activity_operator" >
         </activity>
+        <activity
+            android:name=".RecycleViewActivity"
+            android:label="@string/title_activity_recycle_view" >
+        </activity>
     </application>
 
 </manifest>

@@ -88,6 +88,16 @@ public class OperatorActivity extends BaseActivity implements IBaseSubscriber {
     }
 
     @Override
+    protected void initViews() {
+
+    }
+
+    @Override
+    protected void initEvents() {
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operator);

@@ -45,6 +45,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         return ((App) getApplication()).getAppcomponet();
     }
     protected  abstract void setUpComponent(AppComponent appComponent);
+    protected abstract void initViews();
+    protected  abstract void initEvents();
 
     @Override
     public void setContentView(int layoutResID) {
@@ -57,6 +59,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setUpComponent(getAppComponent());
         setUpActivityComponet();
+        initViews();
+        initEvents();
     }
 
     @Override

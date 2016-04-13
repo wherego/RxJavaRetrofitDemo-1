@@ -15,5 +15,12 @@
         android:layout_height="60dp"
         android:layout_centerInParent="true"
         android:text="测试操作符"/>
+    <Button
+        android:id="@+id/btnRecyclerView"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/btnOper"
+        android:layout_alignLeft="@id/btnOper"
+        android:text="RecyclerViewComAdapter测试"/>
 
 </RelativeLayout>
