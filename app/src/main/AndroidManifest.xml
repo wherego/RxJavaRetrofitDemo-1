@@ -27,6 +27,10 @@
             android:name=".RecycleViewActivity"
             android:label="@string/title_activity_recycle_view" >
         </activity>
+        <activity
+            android:name=".RefreshRecyclerViewActivity"
+            android:label="@string/title_activity_refresh_recycler_view" >
+        </activity>
     </application>
 
 </manifest>

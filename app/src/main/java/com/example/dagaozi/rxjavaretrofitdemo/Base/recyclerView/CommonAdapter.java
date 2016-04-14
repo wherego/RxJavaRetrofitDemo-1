@@ -21,8 +21,12 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
     protected List<T> mDatas;
     protected LayoutInflater mInflater;
     private OnItemClickListener mOnItemClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
     public void setOnItemClickListener(OnItemClickListener onItemClickListener){
         this.mOnItemClickListener=onItemClickListener;
+    }
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener){
+        this.mOnItemLongClickListener=onItemLongClickListener;
     }
     public CommonAdapter(Context context,int layoutId,List<T> datas){
         mContext=context;
@@ -30,6 +34,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
         mLayoutId=layoutId;
         mDatas=datas;
     }
+
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
@@ -66,7 +71,7 @@ public abstract class CommonAdapter<T> extends RecyclerView.Adapter<ViewHolder> 
                                  if (mOnItemClickListener != null)
                                    {
                                         int position = getPosition(viewHolder);
-                                        return mOnItemClickListener.onItemLongClick(parent, v, mDatas.get(position), position);
+                                        return mOnItemLongClickListener.onItemLongClick(parent, v, mDatas.get(position), position);
                                    }
                                 return false;
                             }

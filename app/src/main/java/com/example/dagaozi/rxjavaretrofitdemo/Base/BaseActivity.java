@@ -2,6 +2,7 @@ package com.example.dagaozi.rxjavaretrofitdemo.Base;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
 
 import com.example.dagaozi.rxjavaretrofitdemo.dagger.components.AppComponent;
 import com.example.dagaozi.rxjavaretrofitdemo.dagger.components.DaggerActivityComponent;
@@ -57,6 +58,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setUpComponent(getAppComponent());
         setUpActivityComponet();
         initViews();
