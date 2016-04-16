@@ -37,6 +37,8 @@ public class MainActivity extends BaseActivity implements IBaseSubscriber {
     Button btnOper;
     @Bind(R.id.btnRecyclerView)
     Button btnRecyclerView;
+    @Bind(R.id.btnRefreshRecyclerView)
+    Button btnRefreshRecyclerView;
     private Subscriber<Weather> subscriber;
     @Inject
     Context appContext;
@@ -100,14 +102,17 @@ public class MainActivity extends BaseActivity implements IBaseSubscriber {
 
     }
 
-    @OnClick({R.id.btnOper,R.id.btnRecyclerView})
+    @OnClick({R.id.btnOper, R.id.btnRecyclerView,R.id.btnRefreshRecyclerView})
     public void btnClink(Button btn) {
         switch ((btn.getId())) {
             case R.id.btnOper:
-            startActivity(new Intent(MainActivity.this, OperatorActivity.class));
+                startActivity(new Intent(MainActivity.this, OperatorActivity.class));
                 break;
             case R.id.btnRecyclerView:
-                startActivity(new Intent(MainActivity.this,RecycleViewActivity.class));
+                startActivity(new Intent(MainActivity.this, RecycleViewActivity.class));
+                break;
+            case R.id.btnRefreshRecyclerView:
+                startActivity(new Intent(MainActivity.this, RefreshRecyclerViewActivity.class));
                 break;
             default:
                 break;
